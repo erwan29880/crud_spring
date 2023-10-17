@@ -39,6 +39,12 @@ public class ProduitsTest {
         repo.delete(produit);
     }
 
+    @Test
+    public void existsByProduit() {
+        boolean bo = repo.existsByProduit("oeuf");
+        assertTrue(bo);
+    }
+
 
 
 

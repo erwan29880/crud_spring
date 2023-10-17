@@ -30,6 +30,15 @@ public class CommandesController {
         return service.save();
     }
 
+    @GetMapping("/te")
+    public Fake jenesaispas() {
+        Fake fake = new Fake();
+
+        service.jjjjj();
+
+        return fake;
+    }
+
     @GetMapping("/1") 
     public CommandesModele findById() {
         CommandesModele commandes = new CommandesModele();

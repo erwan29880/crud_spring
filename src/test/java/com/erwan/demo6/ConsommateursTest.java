@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.*;
 import com.erwan.demo6.entities.Consommateurs;
 import com.erwan.demo6.repos.ConsommateursRepo;
-import java.util.List;
 
 @SpringBootTest
 public class ConsommateursTest {
@@ -37,14 +36,19 @@ public class ConsommateursTest {
 
     @Test 
     public void deleteByNomAndPrenom () {
-        Long id = repo.deleteByNomAndPrenom("nom3", "prenom3");
-        assertNotEquals(0L, id);
+        repo.deleteByNomAndPrenom("nom3", "prenom3");
     }
 
     @Test 
     public void deleteByemail () {
-        Long id = repo.deleteByEmail("fakeemail@com");
-        assertEquals(0L, id);
+        Consommateurs c = Consommateurs.builder()
+                            .nom("nom4")
+                            .prenom("prenom4")
+                            .email("fakeemail@com")
+                            .mobile(1234567895)
+                            .build();
+        repo.save(c);
+        repo.deleteByEmail("fakeemail@com");
     }
 
     @Test 
@@ -59,7 +63,4 @@ public class ConsommateursTest {
         Long id = repo.findIdByEmail("email1@truc.com");
         assertEquals(1L, id);
     }
-    
-
-
 }

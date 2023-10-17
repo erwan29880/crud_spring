@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import com.erwan.demo6.entities.Consommateurs;
 import com.erwan.demo6.entities.Commandes;
-import com.erwan.demo6.repos.CommandesRepo;
-import com.erwan.demo6.repos.ConsommateursRepo;
+import com.erwan.demo6.repos.*;
+import jakarta.persistence.Tuple;
 import com.erwan.demo6.entities.Produits;
 
 @SpringBootTest
@@ -22,6 +22,8 @@ public class CommandesTest {
     @Autowired 
     private ConsommateursRepo consommateurRepo;
 
+    @Autowired 
+    private ProduitsRepo produitRepo;
 
     @Test 
     public void getAll() {
@@ -40,10 +42,13 @@ public class CommandesTest {
 
     @Test void insert() {
         Long id = 0L;    
+        List<Long> produitsExistingIndices = new ArrayList<Long>();
+        List<Long> produitsNonExistingIndices = new ArrayList<Long>();
         Date date1 = null; 
-        try {date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-02-02"); }
-        catch (Exception e) {}
 
+        try {date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-02-02"); } catch (Exception e) {}
+
+        // gestion consommateur --> existe déjà ou non (le mail est unique)
         Consommateurs c = Consommateurs.builder()
                             .nom("nom3")
                             .prenom("prenom3")
@@ -58,17 +63,76 @@ public class CommandesTest {
         }
         
         
+        // gestion produits 
+        List<Produits> produits = Arrays.asList(new Produits[]{new Produits("riz au lait"), new Produits("gateau"), new Produits("oeuf")});
+        produits.forEach(prod -> {
+            if (produitRepo.existsByProduit(prod.getProduit())) {
+                produitsExistingIndices.add(produitRepo.findByProduit(prod.getProduit()).getProduitId());
+            }
+            else {
+                Produits newProduct = produitRepo.save(prod);
+                produitsNonExistingIndices.add(newProduct.getProduitId());
+            }
+        });
+
         Commandes commande = Commandes.builder()
                                 .commandDate(date1)
                                 .build();
         Commandes comma = commandesRepo.save(commande);
         commandesRepo.updateCommande(id, comma.getCommandId());
+
+        produitsExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getCommandId(), ind));
+        produitsNonExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getCommandId(), ind));
     }
 
 
     @Test 
     public void updateCommande() {
         commandesRepo.updateCommande(1L, 10L);
+    }
+
+    @Test
+    public void insertCommandeProduit() {
+        commandesRepo.insertCommandeProduit(1L, 1L);
+    }
+
+    @Test 
+    public void deleteCommande() {
+        Commandes command = commandesRepo.findByLastId(); 
+        Long idDelete = command.getCommandId(); 
+        long co = commandesRepo.countByConsommateurid(command.getConsommateurs().getConsommateurId());
+        
+        // commandes
+        Optional<Commandes> c = commandesRepo.findById(idDelete);
+        if (c.isPresent()) {
+            commandesRepo.delete(c.get());
+        }
+        assertTrue(commandesRepo.findById(idDelete).isEmpty());
+        
+        // consommateurs
+        if (co == 1L) {
+            consommateurRepo.deleteByEmail(command.getConsommateurs().getEmail());
+        }
+        
+        // commandes_produits
+        commandesRepo.deleteCommandeProduit(idDelete);
+        List<Tuple> cp = commandesRepo.findCommandeProduitByCommandeId(idDelete);
+        assertEquals(0, cp.size());
+    }
+
+    @Test 
+    public void findCommandeProduitByCommandeId() {
+        List<Tuple> cp = commandesRepo.findCommandeProduitByCommandeId(1L);
+        Tuple c = cp.get(0);
+        assertEquals(1L, c.get(0));
+        assertEquals(1L, c.get(1));
+    }
+
+    @Test 
+    public void countConsommateurs() {
+        Long idDelete = commandesRepo.findByLastId().getConsommateurs().getConsommateurId();
+        long co = commandesRepo.countByConsommateurid(idDelete);
+        assertTrue(co >= 1L);
     }
 
 }
