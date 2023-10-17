@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface ConsommateursRepo extends JpaRepository<Consommateurs, Long>{
     @Transactional
     Long deleteByNomAndPrenom(String nom, String prenom);
+
+    boolean existsByEmail(String email);
 }

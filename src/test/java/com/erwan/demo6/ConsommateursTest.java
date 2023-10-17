@@ -45,4 +45,11 @@ public class ConsommateursTest {
         Long id = repo.deleteByNomAndPrenom("nom3", "prenom3");
         assertNotEquals(0L, id);
     }
+
+    @Test 
+    public void existsByEmail() {
+        String email = "email1@truc.com";
+        boolean check = repo.existsByEmail(email);
+        assertTrue(check);
+    }
 }

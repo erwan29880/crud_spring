@@ -16,11 +16,11 @@ import com.erwan.demo6.entities.Produits;
 public class CommandesTest {
     
     @Autowired 
-    private CommandesRepo repo;
+    private CommandesRepo commandesRepo;
 
     @Test 
     public void getAll() {
-        List<Commandes> comm = repo.findAll();
+        List<Commandes> comm = commandesRepo.findAll();
         assertEquals("nom1", comm.get(0).getConsommateurs().getNom());
         Produits prod = comm.get(0).getProduits().get(0);
         assertEquals("oeuf", prod.getProduit());
@@ -28,41 +28,26 @@ public class CommandesTest {
 
     @Test 
     public void getByLastId() {
-        Commandes comm = repo.findByLastId();
+        Commandes comm = commandesRepo.findByLastId();
         boolean bo = (comm.getCommandId() > 1L);
         assertTrue(bo);
     }
 
     @Test void insert() {
-        Consommateurs consommateur = new Consommateurs();
-        consommateur.setNom("nom3");
-        consommateur.setPrenom("prenom3");
-        consommateur.setEmail("exemple@com");
-        consommateur.setMobile(123456987);
-
-        List<Produits> produits = new ArrayList<Produits>();
-        Produits produit = new Produits();
-        produit.setProduit("toffu");
-        produits.add(produit);
-        produit = new Produits();
-        produit.setProduit("oeuf"); 
-        produits.add(produit);
+       
 
         String sDate1="2023-02-02";
         Date date1 = null; 
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate1); 
         } catch (Exception e) {
-            System.out.println("bof");
+            System.out.println("problème de date");
         }
         
         Commandes commande = new Commandes();
-        commande.setConsommateurs(consommateur);
         commande.setCommandId(0L);
-        commande.setProduits(produits);
         commande.setCommandDate(date1);
-
-        repo.save(commande);
+        commandesRepo.save(commande);
     }
 
 

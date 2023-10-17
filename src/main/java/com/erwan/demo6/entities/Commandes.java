@@ -21,18 +21,18 @@ public class Commandes {
     @Column(name = "commande_date")
     private Date commandDate;
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "consommateur_id")
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    @JoinColumn(name = "consommateur_id", updatable = false, insertable = false)
     Consommateurs consommateurs;
 
 
     @ManyToMany(
-        cascade = CascadeType.ALL, fetch = FetchType.EAGER
+        cascade = CascadeType.PERSIST, fetch = FetchType.EAGER
     )
     @JoinTable(
         name = "commandes_produits",
-        joinColumns = @JoinColumn(name = "commande_id"), 
-        inverseJoinColumns = @JoinColumn(name = "produit_id")
+        joinColumns = @JoinColumn(name = "commande_id", updatable = false, insertable = false),
+        inverseJoinColumns = @JoinColumn(name = "produit_id", updatable = false, insertable = false)
     )
     private List<Produits> produits;
 
