@@ -3,9 +3,7 @@ package com.erwan.demo6;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,6 +24,13 @@ public class CommandesTest {
         assertEquals("nom1", comm.get(0).getConsommateurs().getNom());
         Produits prod = comm.get(0).getProduits().get(0);
         assertEquals("oeuf", prod.getProduit());
+    }
+
+    @Test 
+    public void getByLastId() {
+        Commandes comm = repo.findByLastId();
+        boolean bo = (comm.getCommandId() > 1L);
+        assertTrue(bo);
     }
 
     @Test void insert() {
