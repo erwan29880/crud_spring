@@ -1,16 +1,17 @@
 package com.erwan.demo6.controller;
 
+import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.erwan.demo6.entities.*;
 import com.erwan.demo6.modeles.CommandesModele;
-import com.erwan.demo6.modeles.Fake;
-
-import java.util.*;
-import org.springframework.web.bind.annotation.*;
 import com.erwan.demo6.services.CommandesService;
+
 
 
 @RestController
@@ -22,25 +23,27 @@ public class CommandesController {
 
     @GetMapping("/")
     public List<Commandes> comm() {
+        // TODO implémenter la logique dans le service -> boucle infinie voir findById
         return service.findAll();
     } 
 
+    // test save commande 
     @GetMapping("/p")
+    // TODO implémenter la méthode dans le service : voir commandesTest
     public Commandes postt() {
         return service.save();
     }
 
-    @GetMapping("/te")
-    public Fake jenesaispas() {
-        Fake fake = new Fake();
 
-        service.jjjjj();
-
-        return fake;
-    }
-
+    /**
+     * get by id 
+     * obligation de passer par un modèle, il n'est pas possible de renvoyer directement l'objet requêté
+     * problème de boucle infinie
+     * @return
+     */
     @GetMapping("/1") 
     public CommandesModele findById() {
+        // TODO implémenter la logique dans le service
         CommandesModele commandes = new CommandesModele();
         Optional<Commandes> co = service.findById(1L);
         
@@ -57,11 +60,7 @@ public class CommandesController {
             commandes.setPrenom(c.getConsommateurs().getPrenom());
             commandes.setEmail(c.getConsommateurs().getEmail());
             commandes.setMobile(c.getConsommateurs().getMobile());
-            
         });
-
         return commandes;
     }
-
-
 }

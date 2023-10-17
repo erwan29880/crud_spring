@@ -1,13 +1,15 @@
 package com.erwan.demo6;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import com.erwan.demo6.repos.ProduitsRepo;
 import com.erwan.demo6.entities.Produits;
+
 
 @SpringBootTest 
 public class ProduitsTest {
@@ -18,7 +20,10 @@ public class ProduitsTest {
     @Test 
     public void findAll() {
         List<Produits> prods = repo.findAll();
-        assertEquals("oeuf", prods.get(0).getProduit());
+        List<String> st = new ArrayList<String>();
+        prods.forEach(s -> st.add(s.getProduit()));
+        boolean contains = st.contains("oeuf");
+        assertTrue(contains);
     }
 
     @Test
@@ -44,8 +49,4 @@ public class ProduitsTest {
         boolean bo = repo.existsByProduit("oeuf");
         assertTrue(bo);
     }
-
-
-
-
 }

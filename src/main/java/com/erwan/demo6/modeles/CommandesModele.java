@@ -1,10 +1,16 @@
 package com.erwan.demo6.modeles;
 
-import com.erwan.demo6.entities.Produits;
 import java.util.List; 
 import java.util.Date;
-import lombok.*;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * classe modèle pour renvoi des données au front 
+ * sans transférer le résultat de la requête dans le modèle une boucle infinie est créée
+ */
 @NoArgsConstructor 
 @AllArgsConstructor 
 @Getter

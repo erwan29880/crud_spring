@@ -3,10 +3,10 @@ package com.erwan.demo6.repos;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.erwan.demo6.entities.Consommateurs;
+import org.springframework.stereotype.Repository;
 import jakarta.transaction.Transactional;
 
-import org.springframework.stereotype.Repository;
+import com.erwan.demo6.entities.Consommateurs;
 
 @Repository
 public interface ConsommateursRepo extends JpaRepository<Consommateurs, Long>{

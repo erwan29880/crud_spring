@@ -1,17 +1,17 @@
 package com.erwan.demo6;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import jakarta.persistence.Tuple;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import com.erwan.demo6.entities.Consommateurs;
-import com.erwan.demo6.entities.Commandes;
+
 import com.erwan.demo6.repos.*;
-import jakarta.persistence.Tuple;
-import com.erwan.demo6.entities.Produits;
+import com.erwan.demo6.entities.*;
 
 @SpringBootTest
 public class CommandesTest {

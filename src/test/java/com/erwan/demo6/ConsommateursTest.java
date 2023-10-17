@@ -1,9 +1,11 @@
 package com.erwan.demo6;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.jupiter.api.Assertions.*;
+
 import com.erwan.demo6.entities.Consommateurs;
 import com.erwan.demo6.repos.ConsommateursRepo;
 
