@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "consommateurs")
 public class Consommateurs {

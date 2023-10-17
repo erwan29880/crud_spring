@@ -7,6 +7,7 @@ import java.util.*;
 @Data 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter 
 @Setter 
 @Entity 
@@ -19,6 +20,10 @@ public class Produits {
     private Long produitId; 
 
     private String produit;
+
+    public Produits(String produit) {
+        this.produit = produit;
+    }
 
     @ManyToMany(mappedBy = "produits")
     List<Commandes> commandes;

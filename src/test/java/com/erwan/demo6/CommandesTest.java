@@ -10,6 +10,7 @@ import java.util.*;
 import com.erwan.demo6.entities.Consommateurs;
 import com.erwan.demo6.entities.Commandes;
 import com.erwan.demo6.repos.CommandesRepo;
+import com.erwan.demo6.repos.ConsommateursRepo;
 import com.erwan.demo6.entities.Produits;
 
 @SpringBootTest
@@ -17,6 +18,10 @@ public class CommandesTest {
     
     @Autowired 
     private CommandesRepo commandesRepo;
+
+    @Autowired 
+    private ConsommateursRepo consommateurRepo;
+
 
     @Test 
     public void getAll() {
@@ -34,21 +39,36 @@ public class CommandesTest {
     }
 
     @Test void insert() {
-       
-
-        String sDate1="2023-02-02";
+        Long id = 0L;    
         Date date1 = null; 
-        try {
-            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate1); 
-        } catch (Exception e) {
-            System.out.println("problème de date");
+        try {date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2023-02-02"); }
+        catch (Exception e) {}
+
+        Consommateurs c = Consommateurs.builder()
+                            .nom("nom3")
+                            .prenom("prenom3")
+                            .email("email3@truc.com")
+                            .mobile(1234567895)
+                            .build();
+        if (consommateurRepo.existsByEmail(c.getEmail())) {
+            id  = consommateurRepo.findIdByEmail(c.getEmail());
+        } else {
+            Consommateurs cons = consommateurRepo.save(c);
+            id = cons.getConsommateurId();
         }
         
-        Commandes commande = new Commandes();
-        commande.setCommandId(0L);
-        commande.setCommandDate(date1);
-        commandesRepo.save(commande);
+        
+        Commandes commande = Commandes.builder()
+                                .commandDate(date1)
+                                .build();
+        Commandes comma = commandesRepo.save(commande);
+        commandesRepo.updateCommande(id, comma.getCommandId());
     }
 
+
+    @Test 
+    public void updateCommande() {
+        commandesRepo.updateCommande(1L, 10L);
+    }
 
 }

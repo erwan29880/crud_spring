@@ -9,6 +9,7 @@ import java.util.*;
 @Data
 @Getter 
 @Setter
+@Builder
 @Entity
 @Table(name = "commandes")
 public class Commandes {
