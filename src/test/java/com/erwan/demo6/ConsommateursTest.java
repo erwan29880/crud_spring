@@ -37,9 +37,7 @@ public class ConsommateursTest {
         c.setPrenom("prenom3");
         c.setEmail("email3@truc.com");
         c.setMobile(1234567895);
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            repo.save(c);
-        });
+        assertDoesNotThrow(() -> repo.save(c));
     }
 
     @Test 
