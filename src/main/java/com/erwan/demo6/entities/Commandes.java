@@ -2,6 +2,8 @@ package com.erwan.demo6.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -25,6 +27,14 @@ public class Commandes {
     @ManyToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "consommateur_id", updatable = false, insertable = false)
     Consommateurs consommateurs;
+
+    public Commandes(String date) {
+        Date date1 = null;
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (Exception e) {}
+        this.commandDate = date1;
+    }
 
 
     @ManyToMany(

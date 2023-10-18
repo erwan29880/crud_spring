@@ -135,4 +135,9 @@ public class CommandesTest {
         assertTrue(co >= 1L);
     }
 
+    @Test 
+    public void existsById() {
+        boolean check = commandesRepo.existsById(1L);
+        assertTrue(check);
+    }
 }
