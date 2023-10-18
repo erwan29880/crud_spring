@@ -19,7 +19,7 @@ public class Commandes {
     @Id 
     @Column(name = "commande_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commandId;
+    private Long id;
 
     @Column(name = "commande_date")
     private Date commandDate;

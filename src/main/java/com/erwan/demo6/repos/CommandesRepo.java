@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 public interface CommandesRepo extends JpaRepository<Commandes, Long> {
 
     boolean existsById(Long id);
-    // Commandes findFirstByOrderByIdDesc();
+    Commandes findFirstByOrderByIdDesc();
 
     @Query(value = "select count(consommateur_id) from commandes where consommateur_id=?1", nativeQuery = true)
     long countByConsommateurid(Long id);
@@ -39,4 +39,5 @@ public interface CommandesRepo extends JpaRepository<Commandes, Long> {
     @Transactional
     @Query(value = "delete from commandes_produits where commande_id=?1", nativeQuery = true)
     void deleteCommandeProduit(Long commandeId);
+
 }

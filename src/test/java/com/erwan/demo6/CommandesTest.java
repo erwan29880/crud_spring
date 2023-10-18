@@ -33,13 +33,7 @@ public class CommandesTest {
         assertEquals("oeuf", prod.getProduit());
     }
 
-    @Test 
-    public void getByLastId() {
-        Commandes comm = commandesRepo.findByLastId();
-        boolean bo = (comm.getCommandId() > 1L);
-        assertTrue(bo);
-    }
-
+   
     @Test void insert() {
         Long id = 0L;    
         List<Long> produitsExistingIndices = new ArrayList<Long>();
@@ -79,10 +73,10 @@ public class CommandesTest {
                                 .commandDate(date1)
                                 .build();
         Commandes comma = commandesRepo.save(commande);
-        commandesRepo.updateCommande(id, comma.getCommandId());
+        commandesRepo.updateCommande(id, comma.getId());
 
-        produitsExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getCommandId(), ind));
-        produitsNonExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getCommandId(), ind));
+        produitsExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getId(), ind));
+        produitsNonExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getId(), ind));
     }
 
 
@@ -99,7 +93,7 @@ public class CommandesTest {
     @Test 
     public void deleteCommande() {
         Commandes command = commandesRepo.findByLastId(); 
-        Long idDelete = command.getCommandId(); 
+        Long idDelete = command.getId(); 
         long co = commandesRepo.countByConsommateurid(command.getConsommateurs().getConsommateurId());
         
         // commandes
@@ -139,5 +133,12 @@ public class CommandesTest {
     public void existsById() {
         boolean check = commandesRepo.existsById(1L);
         assertTrue(check);
+    }
+
+    @Test 
+    public void findFirstByOrderByIdDesc() {
+        Commandes comm = commandesRepo.findFirstByOrderByIdDesc();
+        assertNotNull(comm.getProduits());
+        assertNotNull(comm.getConsommateurs().getNom());
     }
 }

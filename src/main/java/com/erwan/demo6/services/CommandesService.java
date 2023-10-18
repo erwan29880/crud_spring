@@ -1,11 +1,8 @@
 package com.erwan.demo6.services;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
-import java.util.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,18 +30,25 @@ public class CommandesService {
     @Autowired 
     private ConsommateursRepo consommateurRepo;
 
-
-
+    /**
+     * trouver toutes les commandes avec consommateur et produits
+     * @return un modèle à envoyer au front
+     */
     public List<CommandesModele> findAll(){
+        // variables
         List<CommandesModele> commandesModele = new ArrayList<CommandesModele>();
+        
+        // récupération données
         List<Commandes> commandes = commandesRepo.findAll();
 
         commandes.forEach(c -> {
+            // mettre les produits en liste
             List<String> produits = new ArrayList<String>();
             c.getProduits().forEach(p -> produits.add(p.getProduit()));
 
+            // insérer un objet commandeModèle dans la liste commandeModele
             commandesModele.add(new CommandesModele(
-                c.getCommandId(),
+                c.getId(),
                 c.getCommandDate(),
                 produits,
                 c.getConsommateurs().getNom(),
@@ -57,7 +61,10 @@ public class CommandesService {
     }
 
     public CommandesModele findById(Long id) {
+        // variables
         CommandesModele commandes = new CommandesModele();
+        
+        
         boolean check = commandesRepo.existsById(id);
 
         if (check) {
@@ -69,7 +76,7 @@ public class CommandesService {
                     produits.add(p.getProduit());
                 });
     
-                commandes.setCommandeId(c.getCommandId());
+                commandes.setCommandeId(c.getId());
                 commandes.setDate(c.getCommandDate());
                 commandes.setProduits(produits);
                 commandes.setNom(c.getConsommateurs().getNom());
@@ -84,62 +91,55 @@ public class CommandesService {
 
 
     public CommandesModele saveCommande(CommandesModele cm) {
-        Long id = 0L;    
-        List<Long> produitsExistingIndices = new ArrayList<Long>();
-        List<Long> produitsNonExistingIndices = new ArrayList<Long>();
+        CommandesModele cmToSend = new CommandesModele();
+        try {
+            Long id = 0L;    
+            List<Long> produitsExistingIndices = new ArrayList<Long>();
+            List<Long> produitsNonExistingIndices = new ArrayList<Long>();
 
-        // gestion consommateur --> existe déjà ou non (le mail est unique)
-        Consommateurs c = Consommateurs.builder()
-                            .nom(cm.getNom())
-                            .prenom(cm.getPrenom())
-                            .email(cm.getEmail())
-                            .mobile(cm.getMobile())
-                            .build();
-        if (consommateurRepo.existsByEmail(c.getEmail())) {
-            id  = consommateurRepo.findIdByEmail(c.getEmail());
-        } else {
-            Consommateurs cons = consommateurRepo.save(c);
-            id = cons.getConsommateurId();
+            // gestion consommateur --> existe déjà ou non (le mail est unique)
+            Consommateurs c = Consommateurs.builder()
+                                .nom(cm.getNom())
+                                .prenom(cm.getPrenom())
+                                .email(cm.getEmail())
+                                .mobile(cm.getMobile())
+                                .build();
+            if (consommateurRepo.existsByEmail(c.getEmail())) {
+                id  = consommateurRepo.findIdByEmail(c.getEmail());
+            } else {
+                Consommateurs cons = consommateurRepo.save(c);
+                id = cons.getConsommateurId();
+            }
+            
+            
+            // gestion produits -> ajouter nouveau produit ou non si il existe
+            // conserver les résultats dans des listes pour remplir plus tard la table de jointure commandes produits
+            cm.getProduits().forEach(prod -> {
+                if (produitRepo.existsByProduit(prod)) {
+                    produitsExistingIndices.add(produitRepo.findByProduit(prod).getProduitId());
+                }
+                else {
+                    Produits newProduct = produitRepo.save(new Produits(0L, prod, null));
+                    produitsNonExistingIndices.add(newProduct.getProduitId());
+                }
+            });
+
+            // insertion commande
+            Commandes commande = new Commandes(cm.getDate());
+            Commandes comma = commandesRepo.save(commande);
+            cmToSend.setCommandeId(comma.getId());
+            commandesRepo.updateCommande(id, comma.getId());
+            
+            // insertion dans la table de jointure des produits
+            if (produitsExistingIndices.size() != 0) {
+                produitsExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getId(), ind));
+            }
+            if (produitsNonExistingIndices.size() != 0) {
+                produitsNonExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getId(), ind));            
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        
-        
-        // gestion produits -> ajouter nouveau produit ou non si il existe
-        // conserver les résultats dans des listes pour remplir plus tard la table de jointure commandes produits
-        cm.getProduits().forEach(prod -> {
-            if (produitRepo.existsByProduit(prod)) {
-                produitsExistingIndices.add(produitRepo.findByProduit(prod).getProduitId());
-            }
-            else {
-                Produits newProduct = produitRepo.save(new Produits(0L, prod, null));
-                produitsNonExistingIndices.add(newProduct.getProduitId());
-            }
-        });
-
-        // insertion commande
-        Commandes commande = new Commandes(cm.getDate());
-        Commandes comma = commandesRepo.save(commande);
-        commandesRepo.updateCommande(id, comma.getCommandId());
-
-        // insertion dans la table de jointure des produits
-        produitsExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getCommandId(), ind));
-        produitsNonExistingIndices.forEach(ind -> commandesRepo.insertCommandeProduit(comma.getCommandId(), ind));
-
-        // récupérer la dernière commande pour récupérer les produits
-        Commandes commandeSaved = commandesRepo.findByLastId();
-
-        // formatter les produits selon le modèle commandesModele
-        List<String> produitsSaved = new ArrayList<String>();
-        commandeSaved.getProduits().forEach(p ->  produitsSaved.add(p.getProduit()));
-    
-        return new CommandesModele(
-            commandeSaved.getCommandId(),
-            commandeSaved.getCommandDate(),
-            produitsSaved,
-            commandeSaved.getConsommateurs().getNom(),
-            commandeSaved.getConsommateurs().getPrenom(),
-            commandeSaved.getConsommateurs().getEmail(),
-            commandeSaved.getConsommateurs().getMobile()
-        );
+        return cmToSend;
     }
-
 }

@@ -1,37 +1,33 @@
 package com.erwan.demo6.controller;
 
-import java.util.Optional;
 import java.util.List;
-import java.util.ArrayList;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.erwan.demo6.entities.*;
-import com.erwan.demo6.modeles.CommandesModele;
+import com.erwan.demo6.modeles.*;
 import com.erwan.demo6.services.CommandesService;
 
 
 
 @RestController
-@RequestMapping("/bla")
 public class CommandesController {
     
     @Autowired
     private CommandesService service;
 
-    @GetMapping("/")
+    @GetMapping("/commande")
     public List<CommandesModele> comm() {
         return service.findAll();
     } 
 
     // test save commande 
     @CrossOrigin
-    @PostMapping("/p")
+    @PostMapping("/commande")
     public CommandesModele postt(@RequestBody CommandesModele cm) {
+        System.out.println(cm.getProduits());
         return service.saveCommande(cm);
     }
-
 
     /**
      * get by id 
@@ -39,7 +35,7 @@ public class CommandesController {
      * problème de boucle infinie
      * @return
      */
-    @GetMapping("/{id}") 
+    @GetMapping("/commande/{id}") 
     public CommandesModele findById(@PathVariable final Long id) {
         return service.findById(id);
     }
