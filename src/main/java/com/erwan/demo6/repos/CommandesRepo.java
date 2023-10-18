@@ -39,5 +39,4 @@ public interface CommandesRepo extends JpaRepository<Commandes, Long> {
     @Transactional
     @Query(value = "delete from commandes_produits where commande_id=?1", nativeQuery = true)
     void deleteCommandeProduit(Long commandeId);
-
 }
