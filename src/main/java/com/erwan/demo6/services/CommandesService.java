@@ -64,17 +64,17 @@ public class CommandesService {
         // variables
         CommandesModele commandes = new CommandesModele();
         
-        
+        // vérification que l'entrée existe
         boolean check = commandesRepo.existsById(id);
 
+        // traitement de l'optional si l'entrée existe
         if (check) {
             Optional<Commandes> co = commandesRepo.findById(id);
             
             co.ifPresent(c -> {
+                // mise en liste des produits
                 List<String> produits = new ArrayList<String>();
-                c.getProduits().forEach(p -> {
-                    produits.add(p.getProduit());
-                });
+                c.getProduits().forEach(p -> produits.add(p.getProduit()));
     
                 commandes.setCommandeId(c.getId());
                 commandes.setDate(c.getCommandDate());
@@ -86,13 +86,17 @@ public class CommandesService {
             });
             return commandes;
         }
+        // retourner l'objet vide le cas échéant
         return commandes;
     }
 
 
     public CommandesModele saveCommande(CommandesModele cm) {
+        // variables
         CommandesModele cmToSend = new CommandesModele();
+        
         try {
+            // variables
             Long id = 0L;    
             List<Long> produitsExistingIndices = new ArrayList<Long>();
             List<Long> produitsNonExistingIndices = new ArrayList<Long>();
@@ -104,6 +108,7 @@ public class CommandesService {
                                 .email(cm.getEmail())
                                 .mobile(cm.getMobile())
                                 .build();
+
             if (consommateurRepo.existsByEmail(c.getEmail())) {
                 id  = consommateurRepo.findIdByEmail(c.getEmail());
             } else {
@@ -140,6 +145,8 @@ public class CommandesService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        // retourner un objet CommandesModele avec uniquement l'id de l'entrée enregistrée dans la table commande
         return cmToSend;
     }
 }

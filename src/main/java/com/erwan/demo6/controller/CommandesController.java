@@ -8,24 +8,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.erwan.demo6.modeles.*;
 import com.erwan.demo6.services.CommandesService;
 
-
-
+    
 @RestController
 public class CommandesController {
     
     @Autowired
     private CommandesService service;
 
+    /**
+     * toutes les commandes, avec consommateur et produits associés
+     * @return la liste des commandes dans un objet CommandeModele
+     */
     @GetMapping("/commande")
     public List<CommandesModele> comm() {
         return service.findAll();
     } 
 
-    // test save commande 
+    /**
+     * enregistrer une commande
+     * avec éventuellement un nouveau consommateur
+     * et la liste des produits
+     * @param cm un objet CommandeModele
+     * @return un objet commandeModele avec l'id de la commande
+     */ 
     @CrossOrigin
     @PostMapping("/commande")
     public CommandesModele postt(@RequestBody CommandesModele cm) {
-        System.out.println(cm.getProduits());
         return service.saveCommande(cm);
     }
 
