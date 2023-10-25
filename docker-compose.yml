@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  bddmysql:
+    container_name: "jee_cons"
+    build:
+      context: ./bdd
+      dockerfile: DockerfileSql
+    environment:
+      - MYSQL_ROOT_PASSWORD=pa
+
+  serveur:
+    container_name: "serveur_jar"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ports:
+    # - 5200:8080
+    depends_on:
+      - bddmysql
+
+  proxy:
+    container_name: "proxy_serveur_jar"
+    build:
+      context: ./proxy
+      dockerfile: DockerfileProxy
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - bddmysql
+      - serveur
