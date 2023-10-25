@@ -19,6 +19,7 @@ public class CommandesController {
      * toutes les commandes, avec consommateur et produits associés
      * @return la liste des commandes dans un objet CommandeModele
      */
+    @CrossOrigin
     @GetMapping("/commande")
     public List<CommandesModele> comm() {
         return service.findAll();
@@ -43,7 +44,8 @@ public class CommandesController {
      * problème de boucle infinie
      * @return
      */
-    @GetMapping("/commande/{id}") 
+    @GetMapping("/commande/{id}")
+    @CrossOrigin //origins = "http://localhost:8080",allowCredentials = true
     public CommandesModele findById(@PathVariable final Long id) {
         return service.findById(id);
     }
