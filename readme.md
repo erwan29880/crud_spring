@@ -1,5 +1,7 @@
 # application Spring Boot avec front Angular dans docker
 
+La branche main présente les fichiers de développement et de production. La branche prod présente uniquement les fichiers utiles en production.  
+
 ```bash 
 docker-compose up --build
 ```
