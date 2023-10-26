@@ -1,0 +1,65 @@
+<div class="container">
+
+    <form [formGroup]="prods" (ngSubmit)="onAddProduct()">
+
+        <div class="form-group">
+            <div class="label"><label for="produit">Ajouter un produit</label></div>
+            <div class="input"><input type="text" formControlName="produit" id="produit"></div>
+        </div>
+
+        <div class="form-group">
+            <button class="form-button" type="submit">rentrer le produit</button>
+        </div>
+
+        <div *ngIf="produits!==null">
+            <ul>
+                <li *ngFor="let produi of produits">{{ produi }}</li>
+            </ul>
+        </div>
+
+    </form>
+
+    <form [formGroup]="infos" (ngSubmit)="onSubmit()">
+        <div class="flex-form">
+
+            <div class="form-group">
+                <div class="label"><label for="prenom">Prénom :</label></div>
+                <div class="input"><input type="text" formControlName="prenom" id="prenom"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="label"><label for="nom">Nom :</label></div>
+                <div class="input"><input type="text" formControlName="nom" id="nom"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="label"><label for="email">Email :</label></div>
+                <div class="input"><input type="text" formControlName="email" id="email"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="label"><label for="mobile">Mobile :</label></div>
+                <div class="input"><input type="text" formControlName="mobile" id="mobile"></div>
+            </div>
+
+        </div>
+
+            <div class="form-group">
+                <button class="form-button" [disabled]="!infos.valid" type="submit">valider la commande</button>
+            </div>
+    </form>
+</div>
+
+<div class="container">
+    <div *ngIf="commandess">
+        <div class="commandes" *ngFor="let commande of commandess">
+            <div (click)="onClickOnItem($event, commande.commandeId)">
+                <div class="commande-title">Commande {{ commande.commandeId }} - {{ commande.date | date:"dd-MM-YYYY" }}</div>
+                <p>{{ commande.prenom | slice:0:1 | uppercase }}{{ commande.prenom | slice:1:-1 | lowercase }} {{ commande.nom | uppercase}} - &#x2709;{{ commande.email }} - &#x260E;{{ commande.mobile | numb }}</p>
+                <ul>
+                    <li *ngFor="let produit of commande.produits">{{ produit }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> 

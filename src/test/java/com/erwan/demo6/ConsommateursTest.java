@@ -31,7 +31,7 @@ public class ConsommateursTest {
                             .nom("nom3")
                             .prenom("prenom3")
                             .email("email3@truc.com")
-                            .mobile(1234567895)
+                            .mobile(1234567895L)
                             .build();
         assertDoesNotThrow(() -> repo.save(c));
     }
@@ -47,7 +47,7 @@ public class ConsommateursTest {
                             .nom("nom4")
                             .prenom("prenom4")
                             .email("fakeemail@com")
-                            .mobile(1234567895)
+                            .mobile(1234567895L)
                             .build();
         repo.save(c);
         repo.deleteByEmail("fakeemail@com");

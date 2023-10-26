@@ -26,7 +26,7 @@ public class Consommateurs {
     private List<Commandes> commandes;
 
     @Column(length=10)
-    private int mobile;
+    private Long mobile;
 
     @Override
     public String toString() {

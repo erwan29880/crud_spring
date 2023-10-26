@@ -149,4 +149,17 @@ public class CommandesService {
         // retourner un objet CommandesModele avec uniquement l'id de l'entrée enregistrée dans la table commande
         return cmToSend;
     }
+
+
+    public boolean deleteById(Long id) {
+        boolean check = false;
+        Optional<Commandes> c = commandesRepo.findById(id);
+        if (c.isPresent()) {
+            try {
+                commandesRepo.delete(c.get());
+                check = true;
+            } catch (Exception e) {}
+        }
+        return check;
+    }
 }

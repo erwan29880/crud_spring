@@ -19,7 +19,7 @@ public class CommandesController {
      * toutes les commandes, avec consommateur et produits associés
      * @return la liste des commandes dans un objet CommandeModele
      */
-    @CrossOrigin
+    @CrossOrigin(origins = {"http://localhost:4200"})
     @GetMapping("/commande")
     public List<CommandesModele> comm() {
         return service.findAll();
@@ -32,7 +32,7 @@ public class CommandesController {
      * @param cm un objet CommandeModele
      * @return un objet commandeModele avec l'id de la commande
      */ 
-    @CrossOrigin
+    @CrossOrigin(origins = {"http://localhost:4200"})
     @PostMapping("/commande")
     public CommandesModele postt(@RequestBody CommandesModele cm) {
         return service.saveCommande(cm);
@@ -45,8 +45,15 @@ public class CommandesController {
      * @return
      */
     @GetMapping("/commande/{id}")
-    @CrossOrigin //origins = "http://localhost:8080",allowCredentials = true
+    @CrossOrigin(origins = {"http://localhost:4200"}) //origins = "http://localhost:8080",allowCredentials = true
     public CommandesModele findById(@PathVariable final Long id) {
         return service.findById(id);
+    }
+
+    @CrossOrigin(origins = {"http://localhost:4200"})
+    @DeleteMapping("/commande/{id}")
+    public CommandesModele deleteById(@PathVariable final Long id) {
+        this.service.deleteById(id);
+        return new CommandesModele();
     }
 }

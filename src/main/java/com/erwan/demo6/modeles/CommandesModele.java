@@ -20,9 +20,9 @@ public class CommandesModele {
     private String nom;
     private String prenom;
     private String email;
-    private int mobile;
+    private Long mobile;
 
-    public CommandesModele(Long id, String date, List<String> produits, String nom, String prenom, String email,int mobile) {
+    public CommandesModele(Long id, String date, List<String> produits, String nom, String prenom, String email,Long mobile) {
         this.commandeId = id;
         this.date = date;
         this.produits = produits;
@@ -32,7 +32,7 @@ public class CommandesModele {
         this.mobile = mobile;
     }
 
-    public CommandesModele(Long id, Date date, List<String> produits, String nom, String prenom, String email,int mobile) {
+    public CommandesModele(Long id, Date date, List<String> produits, String nom, String prenom, String email,Long mobile) {
         String date1 = null;
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").format(date); 
@@ -55,5 +55,16 @@ public class CommandesModele {
             date1 = new SimpleDateFormat("yyyy-MM-dd").format(date); 
         } catch (Exception e) {}
         this.date = date1;
+    }
+
+    @Override
+    public String toString() {
+        String toRet = this.commandeId +" "+ this.date +" "+ this.nom +" "+ this.prenom +" "+ this.email +" "+ this.mobile; 
+
+        for (String pro: this.produits) {
+            toRet += " " + pro;
+        }
+
+        return toRet;
     }
 }

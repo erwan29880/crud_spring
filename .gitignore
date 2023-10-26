@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+front/dist
+front/tmp
+front/out-tsc
+front/bazel-out
+front/node_modules
+front/.angular/cache
+front/.sass-cache/
+front/.gitkeep
+front/.editorconfig

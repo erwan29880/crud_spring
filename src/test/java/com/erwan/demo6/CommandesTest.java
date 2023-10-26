@@ -47,7 +47,7 @@ public class CommandesTest {
                             .nom("nom3")
                             .prenom("prenom3")
                             .email("email3@truc.com")
-                            .mobile(1234567895)
+                            .mobile(1234567895L)
                             .build();
         if (consommateurRepo.existsByEmail(c.getEmail())) {
             id  = consommateurRepo.findIdByEmail(c.getEmail());
@@ -103,7 +103,7 @@ public class CommandesTest {
         }
         assertTrue(commandesRepo.findById(idDelete).isEmpty());
         
-        // consommateurs
+        // consommateurs : supprimer si seulement une commande
         if (co == 1L) {
             consommateurRepo.deleteByEmail(command.getConsommateurs().getEmail());
         }
