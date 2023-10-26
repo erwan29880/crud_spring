@@ -40,3 +40,4 @@ front/.angular/cache
 front/.sass-cache/
 front/.gitkeep
 front/.editorconfig
+front-built/node_modules

@@ -28,3 +28,15 @@ services:
     depends_on:
       - bddmysql
       - serveur
+
+  angular:
+    container_name: "front_angular"
+    build:
+      context: ./front-built
+      dockerfile: DockerfileAngular 
+    depends_on:
+      - bddmysql
+      - serveur
+      - proxy
+    ports: 
+      - 4200:4200
